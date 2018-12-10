@@ -1,0 +1,46 @@
+https://medium.com/@daj/how-to-inspect-a-pre-trained-tensorflow-model-5fd2ee79ced0
+import_pb_to_tensorboard.py, don't use this code, it will throw parse error due to buffer limit
+https://github.com/tensorflow/tensorflow/issues/582
+
+use the saved model api to load the model, see updated importer code
+python import_pb_to_tensorboard.py --model_dir savedmodel --log_dir tensorboard
+
+tensorboard --logdir=tensorboard
+http://localhost:6006
+
+check graph against, and create marco.py in Keras
+slim inceptionV3 code, in tensorflow
+https://github.com/tensorflow/models/blob/master/research/slim/nets/inception_v3.py
+keras inceptionV3 code
+https://github.com/keras-team/keras-applications/blob/master/keras_applications/inception_v3.py
+MARCo papter on modified inceptionV3 model
+https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0198883
+extra lay Conv2d_0a_3x3
+599x599 image size, depth of 16, 3x3 filter, stride 2
+also adjusted depth for some of the layters, see paper for details
+also reference
+https://github.com/kentsommer/keras-inceptionV4/blob/master/inception_v4.py
+https://github.com/pytorch/vision/blob/master/torchvision/models/inception.py
+
+what about AuxLogits layer, should it be included for re-training?
+we will only re-train layer 7(a,b,c), these are after AuxLogits, so no need to include AuxLogits
+
+get_weights.py
+extract weights from tensorflow model, into pickle file
+python -mpickle weights.p > tf_weights.txt
+
+convert_weights.py
+load weights from pickle, and save it into keras model (h5)
+
+Second ec2 instance, amazon deep learning AMI, p2xlarge
+Putty session with tunnel for jupyter
+# start Keras2 with tensorflow python3
+source activate tensorflow_p36    (source deactivate)
+jupyter notebook --no-browser --port=8888
+
+On local machine
+Localhost:8888
+
+http://nbviewer.jupyter.org/github/fchollet/deep-learning-with-python-notebooks/blob/master/5.3-using-a-pretrained-convnet.ipynb
+https://becominghuman.ai/transfer-learning-retraining-inception-v3-for-custom-image-classification-2820f653c557
+http://marubon-ds.blogspot.com/2017/10/inceptionv3-fine-tuning-model.html
