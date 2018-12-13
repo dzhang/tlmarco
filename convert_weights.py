@@ -1,4 +1,5 @@
 '''
+not working, don't use this
 modified from 
 https://github.com/kentsommer/keras-inceptionV4/blob/master/convert_weights/convert_weights_to_keras.py
 '''

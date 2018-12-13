@@ -1,3 +1,6 @@
+'''
+load weights from individual npy weight file
+'''
 import os
 import numpy as np
 from tensorflow.keras.models import Model
@@ -23,10 +26,8 @@ for layer in model.layers:
             weight_file = layer.name + '_' + weight_name + '.npy'
             print(weight_file)
             weight_arr = np.load(os.path.join(WEIGHTS_DIR, weight_file))
-
             weights.append(weight_arr)
         layer.set_weights(weights)
-
 
 print('Saving model weights...')
 if not os.path.exists(MODEL_DIR):

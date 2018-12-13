@@ -12,6 +12,12 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+modified from 
+https://github.com/yuyang-huang/keras-inception-resnet-v2/blob/master/inception_resnet_v2.py
+based on 
+https://github.com/tensorflow/models/blob/master/research/slim/nets/inception_v3.py
+https://github.com/keras-team/keras-applications/blob/master/keras_applications/inception_v3.py
 '''
 import numpy as np
 import warnings
@@ -19,21 +25,20 @@ from functools import partial
 
 # Keras Core
 from tensorflow.keras.layers import MaxPooling2D, Conv2D, AveragePooling2D, GlobalAveragePooling2D, GlobalMaxPooling2D
-from tensorflow.keras.layers import Input, Dense, Flatten, Activation
+from tensorflow.keras.layers import Input, Flatten, Activation
 from tensorflow.keras.layers import BatchNormalization, concatenate
 from tensorflow.keras.models import Model
 # Backend
 from tensorflow.keras import backend as K
 # Utils
 from keras_applications.imagenet_utils import _obtain_input_shape
-from keras.engine.topology import get_source_inputs
+from tensorflow.keras.utils import get_source_inputs
 
 
 #########################################################################################
 # Implements the MARCO model based on Inception Network v3 in Keras.
 # https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0198883 #
 #########################################################################################
-
 
 def preprocess_input(x):
     """Preprocesses a numpy array encoding a batch of images.
@@ -98,6 +103,9 @@ def _generate_layer_name(name, branch_idx=None, prefix=None):
 
 
 def marco_base(input):
+    """
+    conv base for the model
+    """
     # Input Shape is 599 x 599 x 3 (th) or 3 x 599 x 599 (th)
     x = conv2d_bn(input, 16, (3, 3), strides=2,
                   padding='valid', name='Conv2d_0a_3x3')
@@ -113,7 +121,7 @@ def marco_base(input):
 
     x = MaxPooling2D((3, 3), strides=2, name='MaxPool_5a_3x3')(x)
 
-    # Mixed_5b:
+    # Mixed_5b
     channel_axis = 1 if K.image_data_format() == 'channels_first' else 3
     name_fmt = partial(_generate_layer_name, prefix='Mixed_5b')
     branch_0 = conv2d_bn(x, 64, (1, 1), name=name_fmt('Conv2d_0a_1x1', 0))
@@ -158,7 +166,7 @@ def marco_base(input):
     x = concatenate([branch_0, branch_1, branch_2, branch_3],
                     axis=channel_axis, name='Mixed_5c')
 
-    # Mixed_5d:
+    # Mixed_5d
     name_fmt = partial(_generate_layer_name, prefix='Mixed_5d')
     branch_0 = conv2d_bn(x, 64, (1, 1), name=name_fmt('Conv2d_0a_1x1', 0))
 
@@ -181,7 +189,7 @@ def marco_base(input):
                     axis=channel_axis, name='Mixed_5d')
 
 
-    # Mixed_6a:
+    # Mixed_6a
     name_fmt = partial(_generate_layer_name, prefix='Mixed_6a')
     branch_0 = conv2d_bn(x, 256, (3, 3), strides=2, padding='valid',
                          name=name_fmt('Conv2d_1a_1x1', 0))  
@@ -198,7 +206,7 @@ def marco_base(input):
     x = concatenate([branch_0, branch_1, branch_2],
                     axis=channel_axis, name=name_fmt('Mixed_6a'))
 
-    # Mixed_6b:
+    # Mixed_6b
     name_fmt = partial(_generate_layer_name, prefix='Mixed_6b')
     branch_0 = conv2d_bn(x, 128, (1, 1), name=name_fmt('Conv2d_0a_1x1', 0))
 
@@ -226,7 +234,7 @@ def marco_base(input):
     x = concatenate([branch_0, branch_1, branch_2,
                      branch_3], axis=channel_axis, name=name_fmt('Mixed_6b'))
 
-    # Mixed_6c :
+    # Mixed_6c
     name_fmt = partial(_generate_layer_name, prefix='Mixed_6c')
     branch_0 = conv2d_bn(x, 144, (1, 1), name=name_fmt('Conv2d_0a_1x1', 0))
 
@@ -254,7 +262,7 @@ def marco_base(input):
     x = concatenate([branch_0, branch_1, branch_2,
                       branch_3], axis=channel_axis, name='Mixed_6c')
 
-    # Mixed_6d:
+    # Mixed_6d
     name_fmt = partial(_generate_layer_name, prefix='Mixed_6d')
     branch_0 = conv2d_bn(x, 144, (1, 1), name=name_fmt('Conv2d_0a_1x1', 0))
 
@@ -282,7 +290,7 @@ def marco_base(input):
     x = concatenate([branch_0, branch_1, branch_2,
                       branch_3], axis=channel_axis, name='Mixed_6d')
 
-    # Mixed_6e:
+    # Mixed_6e
     name_fmt = partial(_generate_layer_name, prefix='Mixed_6e')
     branch_0 = conv2d_bn(x, 96, (1, 1), name=name_fmt('Conv2d_0a_1x1', 0))
 
@@ -310,7 +318,7 @@ def marco_base(input):
     x = concatenate([branch_0, branch_1, branch_2,
                        branch_3], axis=channel_axis, name=name_fmt('Mixed_6e'))
 
-    # Mixed_7a:
+    # Mixed_7a
     name_fmt = partial(_generate_layer_name, prefix='Mixed_7a')
     branch_0 = conv2d_bn(x, 96, (1, 1), name=name_fmt('Conv2d_0a_1x1', 0))
     branch_0 = conv2d_bn(branch_0, 96, (3, 3), strides=2,
@@ -330,7 +338,7 @@ def marco_base(input):
     x = concatenate([branch_0, branch_1, branch_2],
                     axis=channel_axis, name=name_fmt('Mixed_7a'))
 
-    # Mixed_7b:
+    # Mixed_7b
     name_fmt = partial(_generate_layer_name, prefix='Mixed_7b')
     branch_0 = conv2d_bn(x, 192, (1, 1), name=name_fmt('Conv2d_0a_1x1', 0))
 
@@ -358,7 +366,7 @@ def marco_base(input):
     x = concatenate([branch_0, branch_1, branch_2,
                         branch_3], axis=channel_axis, name='Mixed_7b')
 
-    # Mixed_7c:
+    # Mixed_7c
     name_fmt = partial(_generate_layer_name, prefix='Mixed_7c')
     branch_0 = conv2d_bn(x, 192, (1, 1), name=name_fmt('Conv2d_0a_1x1', 0))
 
@@ -396,7 +404,7 @@ def marco(include_top=True,
           pooling=None,
           num_classes=4):
     """Instantiates the marco architecture.
-    Optionally loads weights pre-trained on ImageNet.
+    Optionally loads weights pre-trained on MARCO.
     Note that when using TensorFlow, for best performance you should
     set `"image_data_format": "channels_last"` in your Keras config
     at `~/.keras/keras.json`.
@@ -438,14 +446,14 @@ def marco(include_top=True,
         ValueError: in case of invalid argument for `weights`,
             or invalid input shape.
     """
-    if weights not in {'imagenet', None}:
+    if weights not in {'marco', None}:
         raise ValueError('The `weights` argument should be either '
-                         '`None` (random initialization) or `imagenet` '
-                         '(pre-training on ImageNet).')
+                         '`None` (random initialization) or `marco` '
+                         '(pre-training on MARCO).')
 
-    if weights == 'imagenet' and include_top and num_classes != 1000:
-        raise ValueError('If using `weights` as imagenet with `include_top`'
-                         ' as true, `num_classes` should be 1000')
+    if weights == 'marco' and include_top and num_classes != 4:
+        raise ValueError('If using `weights` as marco with `include_top`'
+                         ' as true, `num_classes` should be 4')
 
     # Determine proper input shape
     input_shape = _obtain_input_shape(
@@ -469,9 +477,15 @@ def marco(include_top=True,
 
     # Final pooling and prediction
     if include_top:
-        x = AveragePooling2D((8,8), strides=2, padding='valid', name='AvgPool_1a_8x8')(x)
-        x = Dense(units=num_classes, name='Logits_Conv2d_1c_1x1')(x)
-        x = Activation('softmax', name='Predictions')(x)
+        name_fmt = partial(_generate_layer_name, prefix='Logits')
+        x = AveragePooling2D((8,8), strides=2, padding='valid', name=name_fmt('AvgPool_1a_8x8'))(x)
+        x = Conv2D(4, (1,1),
+               strides=1,
+               padding='same',
+               use_bias=True,
+               name=name_fmt('Conv2d_1c_1x1'))(x)
+        x = Flatten()(x)
+        x = Activation('softmax', name=name_fmt('Predictions'))(x)
     else:
         if pooling == 'avg':
             x = GlobalAveragePooling2D(name='AvgPool')(x)
@@ -486,7 +500,7 @@ def marco(include_top=True,
     else:
         inputs = img_input
 
-    # Create model
+    # Create final model
     model = Model(inputs, x, name='marco')
 
     # Load weights

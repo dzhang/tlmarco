@@ -8,7 +8,8 @@ python import_pb_to_tensorboard.py --model_dir savedmodel --log_dir tensorboard
 tensorboard --logdir=tensorboard
 http://localhost:6006
 
-check graph against, and create marco.py in Keras
+check graph against, and create marco.py in Keras based on
+https://github.com/yuyang-huang/keras-inception-resnet-v2/blob/master/inception_resnet_v2.py
 slim inceptionV3 code, in tensorflow
 https://github.com/tensorflow/models/blob/master/research/slim/nets/inception_v3.py
 keras inceptionV3 code
@@ -20,7 +21,6 @@ extra lay Conv2d_0a_3x3
 also adjusted depth for some of the layters, see paper for details
 also reference
 https://github.com/kentsommer/keras-inceptionV4/blob/master/inception_v4.py
-https://github.com/pytorch/vision/blob/master/torchvision/models/inception.py
 
 what about AuxLogits layer, should it be included for re-training?
 we will only re-train layer 7(a,b,c), these are after AuxLogits, so no need to include AuxLogits
@@ -31,7 +31,8 @@ extract weights from tensorflow model, into individual weight file under weights
 load_weights.py
 load weights from weight files, and save it into keras model (h5)
 
-Second ec2 instance, amazon deep learning AMI, p2xlarge
+
+all code tested on amazon deep learning AMI, p2xlarge
 Putty session with tunnel for jupyter
 # start Keras2 with tensorflow python3
 source activate tensorflow_p36    (source deactivate)
@@ -39,7 +40,3 @@ jupyter notebook --no-browser --port=8888
 
 On local machine
 Localhost:8888
-
-http://nbviewer.jupyter.org/github/fchollet/deep-learning-with-python-notebooks/blob/master/5.3-using-a-pretrained-convnet.ipynb
-https://becominghuman.ai/transfer-learning-retraining-inception-v3-for-custom-image-classification-2820f653c557
-http://marubon-ds.blogspot.com/2017/10/inceptionv3-fine-tuning-model.html

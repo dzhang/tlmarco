@@ -1,3 +1,6 @@
+'''
+extract TF model weights into individual npy file
+'''
 import os
 import numpy as np
 import tensorflow as tf

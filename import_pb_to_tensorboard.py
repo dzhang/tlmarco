@@ -1,3 +1,7 @@
+'''
+read TF saved model
+generate data for Tensorboard, so the graph can be viewed later
+'''
 import argparse
 import sys
 
