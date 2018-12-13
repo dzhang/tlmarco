@@ -25,12 +25,11 @@ https://github.com/pytorch/vision/blob/master/torchvision/models/inception.py
 what about AuxLogits layer, should it be included for re-training?
 we will only re-train layer 7(a,b,c), these are after AuxLogits, so no need to include AuxLogits
 
-get_weights.py
-extract weights from tensorflow model, into pickle file
-python -mpickle weights.p > tf_weights.txt
+extract_weights.py
+extract weights from tensorflow model, into individual weight file under weights folder
 
-convert_weights.py
-load weights from pickle, and save it into keras model (h5)
+load_weights.py
+load weights from weight files, and save it into keras model (h5)
 
 Second ec2 instance, amazon deep learning AMI, p2xlarge
 Putty session with tunnel for jupyter
