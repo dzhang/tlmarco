@@ -44,7 +44,7 @@ def preprocess_input(x):
     """Preprocesses a numpy array encoding a batch of images.
       This function applies the "Inception" preprocessing which converts
       the RGB values from [0, 255] to [-1, 1]. Note that this preprocessing
-      function is different from `imagenet_utils.preprocess_input()`.
+      function is different from keras `imagenet_utils.preprocess_input()`.
       # Arguments
           x: a 4D numpy array consists of RGB values within [0, 255].
       # Returns
@@ -479,7 +479,7 @@ def marco(include_top=True,
     if include_top:
         name_fmt = partial(_generate_layer_name, prefix='Logits')
         x = AveragePooling2D((8,8), strides=2, padding='valid', name=name_fmt('AvgPool_1a_8x8'))(x)
-        x = Conv2D(4, (1,1),
+        x = Conv2D(num_classes, (1,1),
                strides=1,
                padding='same',
                use_bias=True,
