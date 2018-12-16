@@ -24,15 +24,15 @@ import warnings
 from functools import partial
 
 # Keras Core
-from tensorflow.keras.layers import MaxPooling2D, Conv2D, AveragePooling2D, GlobalAveragePooling2D, GlobalMaxPooling2D
-from tensorflow.keras.layers import Input, Flatten, Activation
-from tensorflow.keras.layers import BatchNormalization, concatenate
-from tensorflow.keras.models import Model
+from keras.layers import MaxPooling2D, Conv2D, AveragePooling2D, GlobalAveragePooling2D, GlobalMaxPooling2D
+from keras.layers import Input, Flatten, Activation
+from keras.layers import BatchNormalization, concatenate
+from keras.models import Model
 # Backend
-from tensorflow.keras import backend as K
+from keras import backend as K
 # Utils
 from keras_applications.imagenet_utils import _obtain_input_shape
-from tensorflow.keras.utils import get_source_inputs
+from keras.engine.topology import get_source_inputs
 
 
 #########################################################################################

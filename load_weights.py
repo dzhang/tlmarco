@@ -3,7 +3,7 @@ load weights from individual npy weight file
 '''
 import os
 import numpy as np
-from tensorflow.keras.models import Model
+from keras.models import Model
 from marco import marco
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'  # p2.Xlarge only has one GPU
