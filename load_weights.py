@@ -36,5 +36,5 @@ model.save_weights(os.path.join(MODEL_DIR, OUTPUT_WEIGHT_FILENAME))
 
 print('Saving model weights (no top)...')
 model_notop = Model(model.inputs, model.get_layer(
-    'Mixed_7c_Branch_3_Conv2d_0b_1x1_Activation').output)       # exclude fully connected layer
+    'Mixed_7c').output)       # up to the last layer before classification head
 model_notop.save_weights(os.path.join(MODEL_DIR, OUTPUT_WEIGHT_FILENAME_NOTOP))
