@@ -1,9 +1,6 @@
-from keras.applications import VGG16
-
-# load model (only its conv base, no head) and its weights, 
-conv_base = VGG16(weights='imagenet',
-                  include_top=False,
-                  input_shape=(599, 599, 3))
+from marco import marco
+# load model (only its conv base, no head) and its weights
+conv_base = marco(include_top=False)
 conv_base.summary()
 
 from keras import models

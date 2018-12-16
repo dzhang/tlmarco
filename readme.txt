@@ -2,7 +2,7 @@ https://medium.com/@daj/how-to-inspect-a-pre-trained-tensorflow-model-5fd2ee79ce
 import_pb_to_tensorboard.py, don't use this code, it will throw parse error due to buffer limit
 https://github.com/tensorflow/tensorflow/issues/582
 
-use the saved model api to load the model, see updated importer code
+use the saved model api to load the model, downloaded from https://github.com/tensorflow/models/tree/master/research/marco
 python import_pb_to_tensorboard.py --model_dir savedmodel --log_dir tensorboard
 
 tensorboard --logdir=tensorboard

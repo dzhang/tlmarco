@@ -1,10 +1,10 @@
 psftp.exe
 slim.py
 slim2.py
-layers.xlsx
 tf_marco_ops.txt
 tf_marco_variables.txt
 tf_weights.txt
-train.py
 convert_weights.py
 get_weights.py
+layers.xlsx
+train.py
